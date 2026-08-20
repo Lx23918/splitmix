@@ -1,0 +1,61 @@
+experiment_name: splitmix
+output_root: outputs
+seed: 42
+
+trainer:
+  accelerator: auto
+  devices: 1
+  precision: 16-mixed
+  max_epochs: 50
+  log_every_n_steps: 10
+  deterministic: false
+
+optimizer:
+  lr: 3.0e-4
+  weight_decay: 0.0
+
+scheduler:
+  factor: 0.1
+  patience: 10
+
+data:
+  eeg_data_path: data/Preprocessed_data_250Hz_whiten
+  image_root: data/Image_set
+  feature_path: data/model_pretrained/data_features
+  subject: sub-01
+  test_subject: null
+  batch_size: 512
+  batch_size_eval: 200
+  num_workers: 0
+  pin_memory: true
+  time_window: [0.0, 1.0]
+  use_split_half_train: true
+  no_leakage: true
+  low_trial_bias: false
+  selected_channels_mode: all
+  eeg_aug: none
+  image_feature_source: original
+  missing_aug_fallback: original
+
+model:
+  num_channels: 63
+  sequence_length: 250
+  token_dim: 40
+  projection_dim: 1024
+  use_cotar: true
+  cotar_type: mean
+  top_k: 7
+  cos_batch: 256
+  consistency_weight: 0.2
+  consistency_branch: all
+  image_loss_weight: 1.0
+  text_loss_weight: 0.2
+  depth_loss_weight: 0.2
+  image_text_distill_weight: 0.0
+  image_depth_distill_weight: 0.0
+  detach_aux_teachers: true
+  split_half_target_weight: 0.0
+  split_half_target_view: a
+  distill_warmup_epochs: 0
+  auxiliary_warmup_epochs: 0
+  compile: false
